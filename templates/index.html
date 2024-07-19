@@ -4,23 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI-Powered Financial Analysis App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        #result {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            padding: 20px;
-            display: none;
-        }
-        .error {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <h1>AI-Powered Company Financial Analysis</h1>
@@ -31,42 +15,6 @@
     </form>
     <p>Note: Use correct ticker symbols (e.g., AAPL for Apple, GOOGL or GOOG for Alphabet/Google)</p>
     <div id="result"></div>
-
-    <script>
-        document.getElementById('analysisForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const companyName = document.getElementById('companyName').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = 'Analyzing...';
-            resultDiv.style.display = 'block';
-
-            try {
-                const response = await fetch('/analyze', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ companyName }),
-                });
-                const data = await response.json();
-                if (data.error) {
-                    resultDiv.innerHTML = `<p class="error">Error: ${data.error}</p>`;
-                } else {
-                    resultDiv.innerHTML = `
-                        <h2>AI Analysis Results for ${data.companyName}</h2>
-                        <p><strong>Revenue Trend:</strong> ${data.revenueTrend}</p>
-                        <p><strong>Profitability:</strong> ${data.profitability}</p>
-                        <p><strong>Debt Levels:</strong> ${data.debtLevels}</p>
-                        <p><strong>Cash Flow Generation:</strong> ${data.cashFlow}</p>
-                        <p><strong>Industry Health:</strong> ${data.industryHealth}</p>
-                        <p><strong>Valuation:</strong> ${data.valuation}</p>
-                        <p><strong>Recommendation:</strong> ${data.recommendation}</p>
-                    `;
-                }
-            } catch (error) {
-                resultDiv.innerHTML = `<p class="error">Error occurred while analyzing. Please try again. Details: ${error.message}</p>`;
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
