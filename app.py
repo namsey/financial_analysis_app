@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-load_dotenv()
 from flask import Flask, request, jsonify, render_template
 import yfinance as yf
 import pandas as pd
@@ -10,7 +8,7 @@ import os
 app = Flask(__name__)
 logging.basicConfig(level=logging.DEBUG)
 
-# Set your OpenAI API key
+# Set your OpenAI API key from environment variable
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
 
@@ -40,13 +38,10 @@ def analyze_company_with_ai(company_name):
         Industry: {info.get('industry', 'N/A')}
         Forward P/E: {info.get('forwardPE', 'N/A')}
         """
-
         # Prepare the prompt for GPT-4
         prompt = f"""
         As a financial analyst, evaluate the following financial data and provide insights:
-
         {financial_summary}
-
         Please analyze the following aspects:
         1. Revenue Trend
         2. Profitability
@@ -55,12 +50,10 @@ def analyze_company_with_ai(company_name):
         5. Industry Health
         6. Valuation
         7. Overall Recommendation
-
         Provide a concise analysis for each aspect and an overall recommendation.
         Format your response as a JSON object with the following keys:
         "revenueTrend", "profitability", "debtLevels", "cashFlow", "industryHealth", "valuation", "recommendation"
         """
-
         # Call OpenAI API
         response = openai.ChatCompletion.create(
             model="gpt-4",
@@ -70,7 +63,6 @@ def analyze_company_with_ai(company_name):
                 {"role": "user", "content": prompt}
             ]
         )
-
         # Extract the AI's analysis
         analysis = response.choices[0].message['content']
 
@@ -80,9 +72,7 @@ def analyze_company_with_ai(company_name):
 
         # Add company name to the result
         analysis_dict['companyName'] = company_name
-
         return analysis_dict
-
     except Exception as e:
         logging.error(f"Error in analyze_company_with_ai: {str(e)}")
         return {'error': f"An error occurred while analyzing the company: {str(e)}"}
