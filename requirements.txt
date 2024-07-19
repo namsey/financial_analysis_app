@@ -1,0 +1,4 @@
+yfinance~=0.2.40
+pandas~=2.2.2
+openai~=0.28.0
+Flask~=3.0.3
